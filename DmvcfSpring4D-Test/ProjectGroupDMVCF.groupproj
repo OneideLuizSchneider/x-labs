@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{C00F8982-7D08-4A77-8997-8934AE3B3F49}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="DMVCF\LaboratoryDMVCF_Spring4D_FireDAC_DBerlin.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="DMVCF-Client\Client.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="LaboratoryDMVCF_Spring4D_FireDAC_DBerlin">
+        <MSBuild Projects="DMVCF\LaboratoryDMVCF_Spring4D_FireDAC_DBerlin.dproj"/>
+    </Target>
+    <Target Name="LaboratoryDMVCF_Spring4D_FireDAC_DBerlin:Clean">
+        <MSBuild Projects="DMVCF\LaboratoryDMVCF_Spring4D_FireDAC_DBerlin.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LaboratoryDMVCF_Spring4D_FireDAC_DBerlin:Make">
+        <MSBuild Projects="DMVCF\LaboratoryDMVCF_Spring4D_FireDAC_DBerlin.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Client">
+        <MSBuild Projects="DMVCF-Client\Client.dproj"/>
+    </Target>
+    <Target Name="Client:Clean">
+        <MSBuild Projects="DMVCF-Client\Client.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Client:Make">
+        <MSBuild Projects="DMVCF-Client\Client.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="LaboratoryDMVCF_Spring4D_FireDAC_DBerlin;Client"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="LaboratoryDMVCF_Spring4D_FireDAC_DBerlin:Clean;Client:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="LaboratoryDMVCF_Spring4D_FireDAC_DBerlin:Make;Client:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
