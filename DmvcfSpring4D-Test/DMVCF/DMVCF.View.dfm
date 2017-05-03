@@ -2,8 +2,8 @@ object ViewDMVCF: TViewDMVCF
   Left = 271
   Top = 114
   Caption = 'View'
-  ClientHeight = 159
-  ClientWidth = 201
+  ClientHeight = 321
+  ClientWidth = 311
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -54,5 +54,17 @@ object ViewDMVCF: TViewDMVCF
     Caption = 'Open Browser'
     TabOrder = 3
     OnClick = ButtonOpenBrowserClick
+  end
+  object mmo1: TMemo
+    Left = 8
+    Top = 143
+    Width = 295
+    Height = 170
+    TabOrder = 4
+  end
+  object ApplicationEvents1: TApplicationEvents
+    OnException = ApplicationEvents1Exception
+    Left = 208
+    Top = 72
   end
 end

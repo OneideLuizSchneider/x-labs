@@ -38,7 +38,7 @@ end;
 procedure TWebModuleDMVCF.WebModuleCreate(Sender: TObject);
 begin
   FEngine := TMVCEngine.Create(Self);
-  FEngine.Config[TMVCConfigKey.SessionTimeout] := '30';
+  FEngine.Config[TMVCConfigKey.SessionTimeout] := '500';
   FEngine.Config[TMVCConfigKey.DefaultContentType] := TMVCMediaType.APPLICATION_JSON;
   FEngine.Config[TMVCConfigKey.DefaultContentCharset] := TMVCCharSet.ISO88591;
   RegisterControllers();

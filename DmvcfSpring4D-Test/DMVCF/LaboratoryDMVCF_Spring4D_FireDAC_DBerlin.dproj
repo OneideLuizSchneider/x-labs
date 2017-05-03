@@ -93,6 +93,8 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
@@ -103,11 +105,6 @@
         <DCCReference Include="DMVCF.View.pas">
             <Form>ViewDMVCF</Form>
             <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="DMVCF.WebModule.pas">
-            <Form>WebModuleDMVCF</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TWebModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Common\DMVCF.Crud.Controller.pas"/>
         <DCCReference Include="Common\DMVCF.Critical.Section.pas"/>
@@ -124,21 +121,27 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\..\InfraFramework4Delphi\src\InfraFwk4D.Driver.FireDAC.Persistence.pas">
-            <Form>FireDACPersistenceAdapter</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="Persistence\Pessoa.Persistence.pas">
             <Form>PessoaPersistence</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="Rest\Pessoa.Controller.pas"/>
         <DCCReference Include="Business\Pessoa.Business.pas"/>
         <DCCReference Include="Context\RESTFull.Context.pas"/>
         <DCCReference Include="Context\View.Context.pas"/>
         <DCCReference Include="Context\Business.Context.pas"/>
+        <DCCReference Include="..\..\..\InfraFramework4Delphi\src\InfraFwk4D.Driver.FireDAC.Persistence.pas">
+            <Form>FireDACPersistenceAdapter</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Rest\Controllers\Pessoa.Controller.pas"/>
+        <DCCReference Include="Rest\DMVCF.WebModule.pas">
+            <Form>WebModuleDMVCF</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TWebModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Util\DMVCF.Query.Util.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -171,27 +174,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -542,12 +530,27 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>

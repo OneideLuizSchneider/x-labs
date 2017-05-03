@@ -16,9 +16,12 @@ type
     EditPort: TEdit;
     Label1: TLabel;
     ButtonOpenBrowser: TButton;
+    ApplicationEvents1: TApplicationEvents;
+    mmo1: TMemo;
     procedure ButtonStartClick(Sender: TObject);
     procedure ButtonOpenBrowserClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
+    procedure ApplicationEvents1Exception(Sender: TObject; E: Exception);
   private
     FServerListenerCtx: IMVCListenersContext;
     procedure StartServer;
@@ -33,6 +36,11 @@ implementation
 
 uses
   WinApi.Windows, Winapi.ShellApi, DMVCF.WebModule;
+
+procedure TViewDMVCF.ApplicationEvents1Exception(Sender: TObject; E: Exception);
+begin
+  mmo1.Lines.Add(DateTimeToStr(now) + ' ERRO= ' + E.Message);
+end;
 
 procedure TViewDMVCF.ButtonOpenBrowserClick(Sender: TObject);
 var

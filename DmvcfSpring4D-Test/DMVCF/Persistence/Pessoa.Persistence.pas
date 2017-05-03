@@ -16,9 +16,7 @@ type
     FDQueryPessoacpfcnpj: TWideStringField;
     FDQueryPessoaendereco_id: TIntegerField;
   private
-    { Private declarations }
   public
-    { Public declarations }
   end;
 
 implementation

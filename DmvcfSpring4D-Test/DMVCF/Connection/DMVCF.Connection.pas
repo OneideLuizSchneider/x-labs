@@ -6,7 +6,7 @@ uses
   System.SysUtils,System.SyncObjs, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error,
   FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Stan.ExprFuncs, Data.DB, FireDAC.Comp.Client,
-  FireDAC.VCLUI.Wait, FireDAC.Comp.UI,
+  FireDAC.VCLUI.Wait, FireDAC.Comp.UI, System.Generics.Collections,
   //Infra
   InfraFwk4D.Driver.FireDAC, InfraFwk4D, FireDAC.Phys.PGDef, FireDAC.Phys.PG;
 
@@ -18,7 +18,7 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
   strict private
-    class var SingletonDatabaseFireDAC: TDMVCFConnection;
+    class var FListaConnection: TDictionary<TComponent, TDMVCFConnection>;
 
     class constructor Create;
     class destructor Destroy;
@@ -27,7 +27,10 @@ type
 
     function GetConnectionAdapter(): TFireDACConnectionAdapter;
   public
-    class function GetAdapter(): TFireDACConnectionAdapter; static;
+    function GetAdapter(): TFireDACConnectionAdapter;
+
+    class procedure RemoveConnection(const pComponent: TComponent);
+    class function GetConnection(const pComponent: TComponent): TDMVCFConnection; static;
   end;
 
 implementation
@@ -40,7 +43,7 @@ implementation
 
 class constructor TDMVCFConnection.Create;
 begin
-  SingletonDatabaseFireDAC := nil;
+  FListaConnection:= TDictionary<TComponent, TDMVCFConnection>.Create;
 end;
 
 procedure TDMVCFConnection.DataModuleCreate(Sender: TObject);
@@ -57,27 +60,55 @@ begin
 end;
 
 class destructor TDMVCFConnection.Destroy;
+var
+  Key: TComponent;
 begin
-  if (SingletonDatabaseFireDAC <> nil) then
-    FreeAndNil(SingletonDatabaseFireDAC);
+  for Key in FListaConnection.Keys do
+    FListaConnection.Items[Key].Free;
+
+  FreeAndNil(FListaConnection);
 end;
 
-class function TDMVCFConnection.GetAdapter: TFireDACConnectionAdapter;
+function TDMVCFConnection.GetAdapter: TFireDACConnectionAdapter;
 begin
-  if (SingletonDatabaseFireDAC = nil) then
-  begin
-    Critical.Section.Enter;
-    try
-      SingletonDatabaseFireDAC := TDMVCFConnection.Create(nil);
-    finally
-      Critical.Section.Leave;
+  Result := FConnectionAdapter;
+end;
+
+class function TDMVCFConnection.GetConnection(const pComponent: TComponent): TDMVCFConnection;
+begin
+  Critical.Section.Enter;
+  try
+    Result := nil;
+    if not(FListaConnection.TryGetValue(pComponent, Result)) then
+    begin
+      Result := TDMVCFConnection.Create(nil);
+      FListaConnection.Add(pComponent, Result);
     end;
+  finally
+    Critical.Section.Leave;
   end;
-  Result := SingletonDatabaseFireDAC.GetConnectionAdapter();
 end;
 
 function TDMVCFConnection.GetConnectionAdapter: TFireDACConnectionAdapter;
 begin
   Result := FConnectionAdapter;
 end;
+
+class procedure TDMVCFConnection.RemoveConnection(const pComponent: TComponent);
+var
+  vObj: TDMVCFConnection;
+begin
+  Critical.Section.Enter;
+  try
+    if (FListaConnection.ContainsKey(pComponent)) then
+    begin
+      FListaConnection.TryGetValue(pComponent, vObj);
+      vObj.Free;
+      FListaConnection.Remove(pComponent);
+    end;
+  finally
+    Critical.Section.Leave;
+  end;
+end;
+
 end.

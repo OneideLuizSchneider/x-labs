@@ -66,13 +66,24 @@ end;
 
 procedure TDMVCFCrudController<TBusiness>.FindAll(ctx: TWebContext);
 begin
-  FBusiness.Persistence.GetDataSet().Open();
-  Render(FBusiness.Persistence.GetDataSet());
+  GetCriticalSection().Enter;
+  try
+    FBusiness.Persistence.GetDataSet().Open();
+    Render(FBusiness.Persistence.GetDataSet());
+  finally
+    GetCriticalSection().Leave;
+  end;
 end;
 
 procedure TDMVCFCrudController<TBusiness>.FindOne(ctx: TWebContext);
 begin
-
+  GetCriticalSection().Enter;
+  try
+    //FBusiness.FindOne(TValue.From<Int64>(ctx.Request.Params['id'].ToInt64));
+    Self.Render(FBusiness.Persistence.GetDataSet());
+  finally
+    GetCriticalSection().Leave;
+  end;
 end;
 
 procedure TDMVCFCrudController<TBusiness>.MVCControllerAfterCreate;
